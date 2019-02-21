@@ -21,6 +21,10 @@
         <i class="icon iconfont icon-gongnengjianyi"></i>
         <div>设置</div>
       </li>
+      <li>
+        <i class="icon iconfont icon-gongnengjianyi"></i>
+        <div>设置</div>
+      </li>
 
     </ul>
   </div>
