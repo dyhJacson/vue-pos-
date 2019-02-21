@@ -38,6 +38,7 @@ export default {
   height: 100%;
   background-color: #1d8ce0;
   float: left;
+
   width: 5%;
 }
 .iconfont {
