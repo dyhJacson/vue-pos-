@@ -31,10 +31,15 @@
                 </template>
               </el-table-column>
             </el-table>
+            <div class="totalDiv">
+              <small>数量：</small>{{this.totalCount}} &nbsp;&nbsp;&nbsp;&nbsp; <small>金额：</small>{{this.totalMoney}}元
+
+            </div>
             <div class="div-btn">
               <el-button type="warning">挂单</el-button>
               <el-button type="danger">删除</el-button>
-              <el-button type="success">结账</el-button>
+              <el-button type="success"
+                         @click="checkout ()">结账</el-button>
             </div>
           </el-tab-pane>
           <el-tab-pane label="挂单">
@@ -51,7 +56,7 @@
           <ul>
             <li v-for="goods in oftenGoods"
                 :key="goods.goodsname"
-                @click="addOrderList">
+                @click="addOrderList(goods)">
               <span>{{goods.goodsName}}</span>
               <span class="o-price">￥{{goods.price}}</span>
             </li>
@@ -63,7 +68,8 @@
               <div>
                 <ul class='cookList'>
                   <li v-for="goods in type0Goods"
-                      :key="goods.goodsname">
+                      :key="goods.goodsname"
+                      @click="addOrderList(goods)">
                     <span class="foodImg"><img src="goods.goodsImg"
                            width="100%"></span>
                     <span class="foodName">{{goods.goodsName}}</span>
@@ -76,7 +82,8 @@
               <div>
                 <ul class='cookList'>
                   <li v-for="goods in type1Goods"
-                      :key="goods.goodsname">
+                      :key="goods.goodsname"
+                      @click="addOrderList(goods)">
                     <span class="foodImg"><img src="goods.goodsImg"
                            width="100%"></span>
                     <span class="foodName">{{goods.goodsName}}</span>
@@ -89,7 +96,8 @@
               <div>
                 <ul class='cookList'>
                   <li v-for="goods in type2Goods"
-                      :key="goods.goodsname">
+                      :key="goods.goodsname"
+                      @click="addOrderList(goods)">
                     <span class="foodImg"><img src="goods.goodsImg"
                            width="100%"></span>
                     <span class="foodName">{{goods.goodsName}}</span>
@@ -102,7 +110,8 @@
               <div>
                 <ul class='cookList'>
                   <li v-for="goods in type3Goods"
-                      :key="goods.goodsname">
+                      :key="goods.goodsname"
+                      @click="addOrderList(goods)">
                     <span class="foodImg"><img src="goods.goodsImg"
                            width="100%"></span>
                     <span class="foodName">{{goods.goodsName}}</span>
@@ -175,7 +184,7 @@ export default {
       // 根据isHave的值判断订单列表中是否已经有此商品
       if (isHave) {
         // 存在就进行数据添加
-        let arr = this.tableDate.filters(o => o.goodsId === goods.goodsId)
+        let arr = this.tableDate.filter(o => o.goodsId === goods.goodsId)
         arr[0].count++
       } else {
         // 不存在就推如数据
@@ -184,9 +193,28 @@ export default {
       }
       // 进行数量和价格的汇总计算
       this.tableDate.forEach((element) => {
-        this.totaCount += element.count
+        this.totalCount += element.count
         this.totalMoney = this.totalMoney + (element.price * element.count)
       })
+    },
+    delAllGoods () {
+      this.tableDate = []
+      this.totalCount = 0
+      this.totalMoney = 0
+    },
+    // 模拟结账
+    checkout () {
+      if (this.totalCount !== 0) {
+        this.tableDate = []
+        this.totalCount = 0
+        this.totalMoney = 0
+        this.$message({
+          message: '结账成功',
+          type: 'success'
+        })
+      } else {
+        this.$message.error('不能空结账')
+      }
     }
   }
 }
@@ -213,6 +241,7 @@ export default {
   padding: 10px;
   margin: 10px;
   background-color: #fff;
+  cursor: pointer;
 }
 .goods-type {
   clear: both;
@@ -230,6 +259,7 @@ export default {
   padding: 2px;
   float: left;
   margin: 2px;
+  cursor: pointer;
 }
 .cookList li span {
   display: block;
@@ -247,5 +277,10 @@ export default {
   font-size: 16px;
   padding-left: 10px;
   padding-top: 10px;
+}
+.totalDiv {
+  background-color: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #d3dec6;
 }
 </style>
